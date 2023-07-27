@@ -1,0 +1,31 @@
+.message-own {
+  margin-top: 10px;
+  text-align: right;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: right;
+  
+  
+  /* max-width: 70%; */
+  
+}
+.message-sender {
+  margin: left;
+  margin-top: 10px;
+}
+.message-box{
+    border-radius: 10px;
+    width: fit-content;
+    max-width: 70%;
+    padding:10px;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+.message-container{
+  overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+.message-container::-webkit-scrollbar{
+  width: 8px;
+}
