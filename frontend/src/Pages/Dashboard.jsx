@@ -2,9 +2,11 @@ import {
   Box,
   Button,
   Heading,
+  Image,
   Input,
   SimpleGrid,
   Spacer,
+  Text,
 } from "@chakra-ui/react";
 import Navbar from "../Components/Navbar";
 import { Search2Icon } from "@chakra-ui/icons";
@@ -13,16 +15,20 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import Conversation from "../Components/Conversation";
 import ChatBox from "../Components/ChatBox";
 import { io } from "socket.io-client";
+import * as Scroll from "react-scroll";
+import "../Components/Chatbox.css";
 
 function Dashboard() {
   // const [text, setText] = useState("");
   const [chats, setChats] = useState([]);
   const [user, setUser] = useState({});
   const [currentChat, setCurrentChat] = useState(null);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState("A");
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [sendMessage, setSendMessage] = useState(null);
   const [recieveMessage, setRecieveMessage] = useState(null);
+  const [search, setSearch] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
 
   const socket = useRef();
 
@@ -90,11 +96,59 @@ function Dashboard() {
     });
   }, []);
   //console.log("recieveMessage", recieveMessage);
-  console.log("onlineuser",onlineUsers)
-  const checkOnlineStatus=(chat)=>{
-    const chatMembers=chat.members.find((member)=>member!=user._id)
-    const online=onlineUsers.find((user)=>user.userId==chatMembers)
-    return online? true:false
+  console.log("onlineuser", onlineUsers);
+  const checkOnlineStatus = (chat) => {
+    const chatMembers = chat.members.find((member) => member != user._id);
+    const online = onlineUsers.find((user) => user.userId == chatMembers);
+    return online ? true : false;
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log("search", search);
+
+    fetch(`http://localhost:8080/user/allUsers?name=${search}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log("searchresult",res)
+        setSearchResult(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setSearch("");
+  };
+
+  const handleAddChat=(id)=>{
+    let payload={
+      senderId:user._id,
+      receiverId:id
+    }
+
+    fetch(`http://localhost:8080/chat`,{
+      method:"POST",
+      body:JSON.stringify(payload),
+      headers:{
+        "Content-Type":"application/json"
+      }
+
+    })
+    .then((res) => res.json())
+      .then((res) => {
+        //console.log("searchresult",res)
+        handleGetChat()
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      setSearchResult([])
+
   }
 
   return (
@@ -156,6 +210,7 @@ function Dashboard() {
         <TabPanels>
           <TabPanel>
             {/* <p>one!</p> */}
+
             <Box
               width={["100%", "100%", "70%", "30%"]}
               margin={"auto"}
@@ -170,11 +225,50 @@ function Dashboard() {
                 justifyContent={"center"}
                 alignItems={"center"}
               >
-                <Input placeholder="Search User" />
-                <Button colorScheme={"blue"}>
+                <Input
+                  placeholder="Search User"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <Button colorScheme={"blue"} onClick={handleSearch}>
                   <Search2Icon />
                 </Button>
               </Box>
+              <br />
+              {searchResult.length > 0 ? (
+                <Box>
+                  {searchResult &&
+                    searchResult?.map((el) => (
+                      <Box
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={"10px"}
+                        textAlign={"left"}
+                        padding={"20px"}
+                        cursor={"pointer"}
+                        boxShadow="lg"
+                        rounded="md"
+                        bg="white"
+                        onClick={()=>handleAddChat(el._id)}
+                      >
+                        <Box width={["15%","15%","15%","15%"]}>
+                          <Image
+                            src={
+                              el.image
+                                ? el.image
+                                : "https://tse1.mm.bing.net/th?id=OIP.hXZi-2Lc_OPdbDXIR_MSNQHaHa&pid=Api&rs=1&c=1&qlt=95&w=122&h=122"
+                            }
+                          />
+                        </Box>
+                        <Box>
+                          <Text fontWeight={"bold"}>{el.name}</Text>
+                        </Box>
+                      </Box>
+                    ))}
+                </Box>
+              ) : (
+                ""
+              )}
               <br />
               <Box
                 textAlign={"left"}
@@ -185,10 +279,16 @@ function Dashboard() {
               >
                 <Heading size={"md"}>Chats</Heading>
                 <br />
-                <Box height={"470px"}>
+
+                <Box height={"470px"} className="message-container">
                   {chats.map((el) => (
                     <Box onClick={() => setCurrentChat(el)} cursor={"pointer"}>
-                      <Conversation key={el._id} data={el} userId={user._id} online={checkOnlineStatus(el)} />
+                      <Conversation
+                        key={el._id}
+                        data={el}
+                        userId={user._id}
+                        online={checkOnlineStatus(el)}
+                      />
                     </Box>
                   ))}
                 </Box>
@@ -212,7 +312,6 @@ function Dashboard() {
                   currentUser={user._id}
                   setSendMessage={setSendMessage}
                   recieveMessage={recieveMessage}
-                 
                 />
               </Box>
             </Box>

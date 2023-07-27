@@ -66,4 +66,17 @@ userRouter.get("/getuser/:userId",async(req,res)=>{
     }
 })
 
+userRouter.get("/allUsers",async(req,res)=>{
+    let {name}=req.query
+    try{
+        let user=await UserModel.find({name})
+        res.status(200).send(user)
+
+    }catch(err){
+        res.status(400).send(err)
+    }
+})
+
+
+
 module.exports={userRouter}

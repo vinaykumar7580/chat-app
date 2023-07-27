@@ -25,6 +25,8 @@ import {
   ChatIcon,
   EditIcon,
 } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
+
 
 const NavLink = ({ children }) => (
   <Link
@@ -44,6 +46,8 @@ const NavLink = ({ children }) => (
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const navigate=useNavigate()
   return (
     <>
       <Box bg={"#FFFFFF"} px={8} boxShadow="lg">
@@ -82,11 +86,14 @@ export default function Navbar() {
                     />
                   </Center>
                   <br />
+                 
+                  <br />
                   <Center>
                     <p>Username</p>
                   </Center>
                   <br />
                   <MenuDivider />
+                  <MenuItem onClick={()=>navigate("/profile")}>Change Profile</MenuItem>
                   <MenuItem>Logout</MenuItem>
                 </MenuList>
               </Menu>

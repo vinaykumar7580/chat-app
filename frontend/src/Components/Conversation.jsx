@@ -1,5 +1,6 @@
 import { Box, Center, Image, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import "./Chatbox.css";
 
 function Conversation({ data, userId,online }) {
   const [userData, setUserData] = useState(null);
@@ -29,13 +30,14 @@ function Conversation({ data, userId,online }) {
   //console.log("next",userData)
 
   return (
-    <Box>
+    <Box >
       <br />
       <Box
         display={"flex"}
         justifyContent={"left"}
         alignItems={"center"}
         gap={"20px"}
+        
       >
         <Box width={"15%"}>
           <Image
