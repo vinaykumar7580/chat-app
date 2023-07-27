@@ -76,7 +76,7 @@ export default function Register() {
       image: imageUrl,
     };
 
-    fetch(`http://localhost:8080/user/register`, {
+    fetch(`https://chat-app-backend-m4uc.onrender.com/user/register`, {
       method: "POST",
       body: JSON.stringify(payload),
       headers: {

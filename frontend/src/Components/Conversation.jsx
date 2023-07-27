@@ -10,7 +10,7 @@ function Conversation({ data, userId,online }) {
     console.log(nextid);
 
     const handleNextUser = () => {
-      fetch(`http://localhost:8080/user/getuser/${nextid}`, {
+      fetch(`https://chat-app-backend-m4uc.onrender.com/user/getuser/${nextid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

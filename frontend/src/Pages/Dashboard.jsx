@@ -34,7 +34,7 @@ function Dashboard() {
 
   useEffect(() => {
     const handleGetUser = () => {
-      fetch(`http://localhost:8080/user/getuser`, {
+      fetch(`https://chat-app-backend-m4uc.onrender.com/user/getuser`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,7 @@ function Dashboard() {
   }, [user]);
 
   const handleGetChat = () => {
-    fetch(`http://localhost:8080/chat/${user._id}`, {
+    fetch(`https://chat-app-backend-m4uc.onrender.com/chat/${user._id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ function Dashboard() {
   };
   // console.log("receivemessage",recieveMessage)
   useEffect(() => {
-    socket.current = io("http://localhost:8800");
+    socket.current = io("https://chat-app-socket-iuo5.onrender.com/");
 
     socket.current.emit("new-user-add", user._id);
     socket.current.on("get-users", (users) => {
@@ -107,7 +107,7 @@ function Dashboard() {
     e.preventDefault();
     console.log("search", search);
 
-    fetch(`http://localhost:8080/user/allUsers?name=${search}`, {
+    fetch(`https://chat-app-backend-m4uc.onrender.com/user/allUsers?name=${search}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -130,7 +130,7 @@ function Dashboard() {
       receiverId:id
     }
 
-    fetch(`http://localhost:8080/chat`,{
+    fetch(`https://chat-app-backend-m4uc.onrender.com/chat`,{
       method:"POST",
       body:JSON.stringify(payload),
       headers:{

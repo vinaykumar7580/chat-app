@@ -26,7 +26,7 @@ function ChatBox({ chat, currentUser, setSendMessage, recieveMessage}) {
     const userId = chat?.members?.find((el) => el != currentUser);
 
     const handleNextUser = () => {
-      fetch(`http://localhost:8080/user/getuser/${userId}`, {
+      fetch(`https://chat-app-backend-m4uc.onrender.com/user/getuser/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ function ChatBox({ chat, currentUser, setSendMessage, recieveMessage}) {
     }
   }, [chat]);
   const getMessages = () => {
-    fetch(`http://localhost:8080/message/${chat._id}`, {
+    fetch(`https://chat-app-backend-m4uc.onrender.com/message/${chat._id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -82,7 +82,7 @@ function ChatBox({ chat, currentUser, setSendMessage, recieveMessage}) {
       chatId: chat._id,
     };
 
-    fetch(`http://localhost:8080/message`, {
+    fetch(`https://chat-app-backend-m4uc.onrender.com/message`, {
       method: "POST",
       body: JSON.stringify(message),
       headers: {

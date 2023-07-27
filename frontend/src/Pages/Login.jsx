@@ -58,7 +58,7 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:8080/user/login`, {
+    fetch(`https://chat-app-backend-m4uc.onrender.com/user/login`, {
       method: "POST",
       body: JSON.stringify(form),
       headers: {
